@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 from ipywidgets import interact, interactive, fixed, interact_manual
 import ipywidgets as widgets
 import streamlit as st
-
+import pandas as pd
 
 
 def curvefitting(mod_factor, cd, test_time, norm_heads):
-    
+
+
     cdts=[]
     dless_time = np.arange(0, 30.1, 0.1)
     omega=math.sqrt(abs(1 - (cd/2)**2)) 
@@ -62,7 +63,7 @@ rtc_usp = 0.003 # Radius of Transducer Cable
 rw2_usp = 0.05 # Modified screen radius 
 B = 75 # formation thickness in m 
 
-
+st.sidebar.title("Aquifier Type")
 aqt = ["Confined","Unconfined"]
 aqt2 = st.sidebar.radio("Select Aquifier Type", aqt)
 
@@ -89,25 +90,49 @@ cd=25.3
 rc=math.sqrt((rnc_usp**2)-(rtc_usp**2)) #Effective Radius of casing in m 
 aspect_ratio=b_usp/(rw2_usp)
 
-with open('feilddata.csv', 'r') as infile:
-  # read the file as a dictionary for each row ({header : value})
-  reader = csv.DictReader(infile)
-  data = {}
-  for row in reader:
-    for header, value in row.items():
-      try:
-        data[header].append(value)
-      except KeyError:
-        data[header] = [value]
+st.title("Input Data")
+
+dpin = ["No","Yes"]
+dpin2 = st.radio("Do you want to input Data", dpin)
+
+
+if dpin2=="Yes":
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+
+    if uploaded_file is not None:
+      df = pd.read_csv(uploaded_file)
+      st.write(df)
+
+      obsdat1 = df['T'].values
+      obsdat2= df['Pressure Head in Meters'].values
+      
+      times=obsdat1
+      presshs=obsdat2
+
+      #st.write(obsdata1,type(times))
+
+if dpin2=="No":  
+
+   with open('feilddata.csv', 'r') as infile:
+     # read the file as a dictionary for each row ({header : value})
+     reader = csv.DictReader(infile)
+     data = {}
+     for row in reader:
+       for header, value in row.items():
+         try:
+           data[header].append(value)
+         except KeyError:
+           data[header] = [value]
         
 
 
-obsdat1= data['T']           # Comment : Need to Modify this in Excel make sure header name is same 
-obsdat2= data['Pressure Head in Meters']
-times = list(map(float,obsdat1))
-presshs = list(map(float,obsdat2))
-times= np.array(times)
-presshs= np.array(presshs)
+   obsdat1= data['T']           # Comment : Need to Modify this in Excel make sure header name is same 
+   obsdat2= data['Pressure Head in Meters']
+   times = list(map(float,obsdat1))
+   presshs = list(map(float,obsdat2))
+   times= np.array(times)
+   presshs= np.array(presshs)
+   #st.write(times)
 
 test_time=times-start_time
 stat_dev=presshs-static_level
@@ -122,7 +147,7 @@ cd = st.slider("Cd", value=25.7,max_value=100.0,step=0.1)
 curvefitting(mod_factor, cd, test_time, norm_heads)
 
 
-st.write(cd,mod_factor)
+#st.write(cd,mod_factor)
 
 timeCR=1/mod_factor
 le_rat= 9.81/(timeCR**2)
