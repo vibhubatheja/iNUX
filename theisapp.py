@@ -333,7 +333,7 @@ Under consideration of the pumping test data (extraction rate Q and distance r b
         
                 
         
-menu = ["Introduction","Data Input","Results"]
+menu = ["Introduction","Data Input"]
 choice = st.sidebar.radio("Select a page", menu)
 
 if choice == "Introduction" :
