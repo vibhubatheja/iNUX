@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-#import scipy.special
+import scipy.special
 import os
 import csv
 import streamlit as st 
