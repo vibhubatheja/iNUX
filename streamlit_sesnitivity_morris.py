@@ -144,12 +144,9 @@ def calculate_output(x):
     #output = x1 + 2 * x2 + 0.5 * x3**2 + np.sin(x4) + np.exp(-x5)
     return lmax_transient
 
-
-
 # Function to run the sensitivity analysis
 def run_sensitivity_analysis():
-    # ... your existing code ...
-        # Define the bounds for each variable
+    # Define the bounds for each variable
     problem_bounds = [
         [1, 120],       # Variable Co_t bounds
         [1, 16],        # Variable H_t bounds
@@ -182,7 +179,7 @@ def run_sensitivity_analysis():
     for i, x in enumerate(sample):
         Y.append(calculate_output(x))
         progress = (i + 1) / sample_size * 100
-        progress_bar.progress(progress)
+        st.progress(progress)
 
     # Convert Y to a NumPy array
     Y = np.array(Y)
@@ -201,8 +198,7 @@ st.title("Sensitivity Analysis")
 
 # Run the sensitivity analysis when the button is clicked
 if st.button("Run Sensitivity Analysis"):
-    progress_bar = st.progress(0)
     with st.spinner("Running sensitivity analysis..."):
         run_sensitivity_analysis()
-        progress_bar.progress(100)
     st.success("Sensitivity analysis completed.")
+
