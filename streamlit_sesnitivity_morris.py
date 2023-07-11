@@ -179,7 +179,7 @@ def run_sensitivity_analysis():
     for i, x in enumerate(sample):
         Y.append(calculate_output(x))
         progress = (i + 1) / sample_size * 100
-        st.progress(progress)
+        st.write(progress)
 
     # Convert Y to a NumPy array
     Y = np.array(Y)
